@@ -8,6 +8,8 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
+var useragent = require('express-useragent');
+
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use(function(req, res, next) {
@@ -37,6 +39,17 @@ app.route('/')
     .get(function(req, res) {
 		  res.sendFile(process.cwd() + '/views/index.html');
     })
+
+ 
+app.use(useragent.express());
+
+app.get('/api/whoami', (req, res) => {
+  var data = {};
+  data.software = req.useragent.browser + "/" + req.useragent.os;
+  data.ipaddress = req.headers["x-forwarded-for"].match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/)[0];
+  data.language = req.headers["accept-language"].match(/([^;]+)/)[0];
+  console.log(data);
+});
 
 // Respond not found to all the wrong routes
 app.use(function(req, res, next){
