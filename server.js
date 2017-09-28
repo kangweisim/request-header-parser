@@ -48,7 +48,7 @@ app.get('/api/whoami', (req, res) => {
   data.software = req.useragent.browser + "/" + req.useragent.os;
   data.ipaddress = req.headers["x-forwarded-for"].match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/)[0];
   data.language = req.headers["accept-language"].match(/([^;]+)/)[0];
-  console.log(data);
+  res.end(JSON.stringify(data));
 });
 
 // Respond not found to all the wrong routes
